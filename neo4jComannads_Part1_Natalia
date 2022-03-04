@@ -1,0 +1,60 @@
+CREATE(sample__1:Material {name:'Ti6242 sample'})
+
+CREATE(process1:Process {name:'Heat Treatment'})
+CREATE(tool1:Tool {name:'Thermo Fisher Scientific Furnace'})
+
+
+CREATE(process2:Process {name:'Vacuum'})
+CREATE(process3:Process {name:'Grinding'})
+CREATE(process4:Process {name:'Polishing'})
+CREATE(process5:Process {name:'Vibro-Polishing'})
+
+CREATE(sample2:Material {name:'Starting Material'})
+
+CREATE(process6:Process {name:'Coating'})
+CREATE(sample3:Material {name:'Coated Material'})
+CREATE(tool4:Tool {name:'Quorum Q150 ES'})
+
+
+CREATE(sample_2:Data {name:'Chemical Composition File'})
+CREATE(tool3:Tool {name:'Cameca SX100 electron probe microanalyzer'})
+
+
+CREATE(sample_1:Data {name:'SEM Image'})
+CREATE(tool2:Tool {name:'X SEM machine'})
+
+CREATE(sample_3:Data {name:'Load-Displacement data'})
+
+CREATE(software_1:Software {name:'Stress-Strain Curve Software'})
+
+CREATE(sample_4:Data {name:'Indentation Stress-Strain Curve'})
+CREATE(tool5:Tool {name:'Nano Indenter G2000 BY Keysight'})
+
+
+
+CREATE(sample__1)-[:NEXT_IN_PROCESS]->(process1)
+CREATE(tool1)-[:USED_IN]->(process1)
+CREATE(process1)-[:NEXT_IN_PROCESS]->(process2)
+CREATE(process2)-[:NEXT_IN_PROCESS]->(process3)
+CREATE(process2)-[:NEXT_IN_PROCESS]->(process3)
+CREATE(process3)-[:NEXT_IN_PROCESS]->(process4)
+CREATE(process4)-[:NEXT_IN_PROCESS]->(process5)
+CREATE(process4)-[:NEXT_IN_PROCESS___]->(sample2)
+
+
+
+CREATE(sample_1)-[:DESCRIBES]->(sample2)
+CREATE(tool2)-[:YIELDS]->(sample_1)
+
+CREATE(sample_1)-[:NEXT_IN_PROCESS]->(process6)
+CREATE(process6)-[:NEXT_IN_PROCESS___]->(sample3)
+
+CREATE(sample_2)-[:DESCRIBES]->(sample3)
+CREATE(tool3)-[:YIELDS]->(sample_2)
+
+
+CREATE(sample_3)-[:DESCRIBES]->(sample2)
+CREATE(tool5)-[:YIELDS]->(sample_3)
+
+CREATE(sample_4)-[:INPUTS_TO]->(software_1)
+CREATE(software_1)-[:YIELDS]->(sample_4)
