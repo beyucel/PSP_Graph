@@ -1,0 +1,80 @@
+CREATE(sample1:Data {name:'Sample T014'})
+CREATE(sample2:Data {name:'Sample T015'})
+CREATE(sample3:Data {name:'Sample T016'})
+CREATE(sample4:Data {name:'Sample T017'})
+CREATE(sample5:Data {name:'Sample T018'})
+CREATE(sample6:Data {name:'Sample T019'})
+
+CREATE(software1:Software {name:'Segmentation Software'})
+CREATE(software2:Software {name:'Shadow Removal',Software_order:'1'})
+CREATE(software3:Software {name:'OTSU', thresholdParameter:'155' ,adaptiveMethod:'BORDER_REPLICATE',blockSize:'7',Software_order:'2'})
+
+CREATE(software1)-[:COMPOSED_OF]->(software2)
+CREATE(software1)-[:COMPOSED_OF]->(software3)
+
+
+
+CREATE(sample1)-[:INPUTS_TO]->(software1)
+CREATE(sample2)-[:INPUTS_TO]->(software1)
+CREATE(sample3)-[:INPUTS_TO]->(software1)
+CREATE(sample4)-[:INPUTS_TO]->(software1)
+CREATE(sample5)-[:INPUTS_TO]->(software1)
+CREATE(sample6)-[:INPUTS_TO]->(software1)
+
+CREATE(segmented1:Data {name:'Segmented Sample T014',source_image:'segmented1'})
+CREATE(segmented2:Data {name:'Segmented Sample T015',source_image:'segmented2'})
+CREATE(segmented3:Data {name:'Segmented Sample T016',source_image:'segmented3'})
+CREATE(segmented4:Data {name:'Segmented Sample T017',source_image:'segmented4'})
+CREATE(segmented5:Data {name:'Segmented Sample T018',source_image:'segmented5'})
+CREATE(segmented6:Data {name:'Segmented Sample T019',source_image:'segmented6'})
+
+CREATE(software1)-[:YIELDS]->(segmented1)
+CREATE(software1)-[:YIELDS]->(segmented2)
+CREATE(software1)-[:YIELDS]->(segmented3)
+CREATE(software1)-[:YIELDS]->(segmented4)
+CREATE(software1)-[:YIELDS]->(segmented5)
+CREATE(software1)-[:YIELDS]->(segmented6)
+
+CREATE(quantify1:Software {name:'Quantification Software (Feature Selection)'})
+CREATE(quantify2:Software {name:'2-Point Correlations',Correlations:'[(0,0),(1,0)]',cutoff:'50'})
+
+CREATE(quantify1)-[:COMPOSED_OF]->(quantify2)
+
+
+CREATE(segmented1)-[:INPUTS_TO]->(quantify1)
+CREATE(segmented2)-[:INPUTS_TO]->(quantify1)
+CREATE(segmented3)-[:INPUTS_TO]->(quantify1)
+CREATE(segmented4)-[:INPUTS_TO]->(quantify1)
+CREATE(segmented5)-[:INPUTS_TO]->(quantify1)
+CREATE(segmented6)-[:INPUTS_TO]->(quantify1)
+
+CREATE(features1:Data {name:'Selected Features',features_:'np.array(1,132651)'})
+CREATE(features2:Data {name:'Selected Features',features_:'np.array(1,132651)'})
+CREATE(features3:Data {name:'Selected Features',features_:'np.array(1,132651)'})
+CREATE(features4:Data {name:'Selected Features',features_:'np.array(1,132651)'})
+CREATE(features5:Data {name:'Selected Features',features_:'np.array(1,132651)'})
+CREATE(features6:Data {name:'Selected Features',features_:'np.array(1,132651)'})
+
+CREATE(quantify1)-[:YIELDS]->(features1)
+CREATE(quantify1)-[:YIELDS]->(features2)
+CREATE(quantify1)-[:YIELDS]->(features3)
+CREATE(quantify1)-[:YIELDS]->(features4)
+CREATE(quantify1)-[:YIELDS]->(features5)
+CREATE(quantify1)-[:YIELDS]->(features6)
+
+
+CREATE(dimreduce1:Software {name:'Dimensionality Reduction Software',dim_reduction_method:'PCA',n_components:'3'})
+
+CREATE(features1)-[:INPUTS_TO]->(dimreduce1)
+CREATE(features2)-[:INPUTS_TO]->(dimreduce1)
+CREATE(features3)-[:INPUTS_TO]->(dimreduce1)
+CREATE(features4)-[:INPUTS_TO]->(dimreduce1)
+CREATE(features5)-[:INPUTS_TO]->(dimreduce1)
+CREATE(features6)-[:INPUTS_TO]->(dimreduce1)
+
+CREATE(pcscore1:Data {name:'PC scores',components_:'np.array(20,3)',explained_variance_:'np.array(20,1)',singular_values_:'np.array',mean_:'np.array'})
+CREATE(dimreduce1)-[:YIELDS]->(pcscore1)
+CREATE(mlmodel1:Software {name:'ML Model',modelType:'Polynomial Regresion',Poly_degree:'3',include_bias:'True'})
+CREATE(pcscore1)-[:INPUTS_TO]->(mlmodel1)
+CREATE(modeldata:Data {name:'Model Data',Train_Rsquared:'.98',Test_Rsquared:'.97',coefs:'np.array'})
+CREATE(mlmodel1)-[:YIELDS]->(modeldata)
