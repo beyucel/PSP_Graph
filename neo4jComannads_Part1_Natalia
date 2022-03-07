@@ -36,18 +36,19 @@ CREATE(sample__1)-[:NEXT_IN_PROCESS]->(process1)
 CREATE(tool1)-[:USED_IN]->(process1)
 CREATE(process1)-[:NEXT_IN_PROCESS]->(process2)
 CREATE(process2)-[:NEXT_IN_PROCESS]->(process3)
-CREATE(process2)-[:NEXT_IN_PROCESS]->(process3)
 CREATE(process3)-[:NEXT_IN_PROCESS]->(process4)
 CREATE(process4)-[:NEXT_IN_PROCESS]->(process5)
-CREATE(process4)-[:NEXT_IN_PROCESS___]->(sample2)
+CREATE(process5)-[:NEXT_IN_PROCESS___]->(sample2)
 
 
 
 CREATE(sample_1)-[:DESCRIBES]->(sample2)
 CREATE(tool2)-[:YIELDS]->(sample_1)
 
-CREATE(sample_1)-[:NEXT_IN_PROCESS]->(process6)
+CREATE(sample2)-[:NEXT_IN_PROCESS]->(process6)
 CREATE(process6)-[:NEXT_IN_PROCESS___]->(sample3)
+CREATE(tool4)-[:USED_IN]->(process6)
+
 
 CREATE(sample_2)-[:DESCRIBES]->(sample3)
 CREATE(tool3)-[:YIELDS]->(sample_2)
@@ -56,5 +57,5 @@ CREATE(tool3)-[:YIELDS]->(sample_2)
 CREATE(sample_3)-[:DESCRIBES]->(sample2)
 CREATE(tool5)-[:YIELDS]->(sample_3)
 
-CREATE(sample_4)-[:INPUTS_TO]->(software_1)
+CREATE(sample_3)-[:INPUTS_TO]->(software_1)
 CREATE(software_1)-[:YIELDS]->(sample_4)
