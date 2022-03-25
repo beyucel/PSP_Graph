@@ -8,6 +8,10 @@ CREATE(process2:Process {name:'Vacuum'})
 CREATE(process3:Process {name:'Grinding'})
 CREATE(process4:Process {name:'Polishing'})
 CREATE(process5:Process {name:'Vibro-Polishing'})
+CREATE(process51:Process {name:'Characterization Protocol'})
+
+
+CREATE(sample21:Material {name:'Heat-treated Material'})
 
 CREATE(sample2:Material {name:'Starting Material'})
 
@@ -34,11 +38,16 @@ CREATE(tool5:Tool {name:'Nano Indenter G2000 BY Keysight'})
 
 CREATE(sample__1)-[:NEXT_IN_PROCESS]->(process1)
 CREATE(tool1)-[:USED_IN]->(process1)
-CREATE(process1)-[:NEXT_IN_PROCESS]->(process2)
-CREATE(process2)-[:NEXT_IN_PROCESS]->(process3)
-CREATE(process3)-[:NEXT_IN_PROCESS]->(process4)
-CREATE(process4)-[:NEXT_IN_PROCESS]->(process5)
-CREATE(process5)-[:NEXT_IN_PROCESS___]->(sample2)
+CREATE(process1)-[:NEXT_IN_PROCESS]->(sample21)
+CREATE(sample21)-[:NEXT_IN_PROCESS]->(process51)
+
+CREATE(process51)-[:NEXT_IN_PROCESS]->(sample2)
+
+
+CREATE(process51)-[:HasPart]->(process2)
+CREATE(process51)-[:HasPart]->(process3)
+CREATE(process51)-[:HasPart]->(process4)
+CREATE(process51)-[:HasPart]->(process5)
 
 
 
@@ -59,3 +68,47 @@ CREATE(tool5)-[:YIELDS]->(sample_3)
 
 CREATE(sample_3)-[:INPUTS_TO]->(software_1)
 CREATE(software_1)-[:YIELDS]->(sample_4)
+
+
+CREATE(data_4:Data {name:'Simulation Input Data 1'})
+CREATE(data_5:Data {name:'Simulation Input Data 2'})
+CREATE(data_6:Data {name:'Simulation Input Data 3'})
+
+CREATE(software_11:Software {name:'FE Simulation 1'})
+CREATE(software_12:Software {name:'FE Simulation 2'})
+CREATE(software_13:Software {name:'FE Simulation 3'})
+
+
+CREATE(data_41:Data {name:'Simulation Output Data 1'})
+CREATE(data_42:Data {name:'Simulation Output Data 2'})
+CREATE(data_43:Data {name:'Simulation Output Data 3'})
+
+
+CREATE(software_14:Software {name:'Reduced order Model'})
+
+CREATE(data_412:Data {name:'Model Data'})
+
+CREATE(software_141:Software {name:'Calibration'})
+
+CREATE(data_413:Data {name:'Intrinsic Material Properties'})
+
+CREATE(data_4)-[:INPUTS_TO]->(software_11)
+CREATE(data_5)-[:INPUTS_TO]->(software_12)
+CREATE(data_6)-[:INPUTS_TO]->(software_13)
+
+CREATE(software_11)-[:YIELDS]->(data_41)
+CREATE(software_12)-[:YIELDS]->(data_42)
+CREATE(software_13)-[:YIELDS]->(data_43)
+
+CREATE(data_41)-[:INPUTS_TO]->(software_14)
+CREATE(data_42)-[:INPUTS_TO]->(software_14)
+CREATE(data_43)-[:INPUTS_TO]->(software_14)
+
+CREATE(software_14)-[:YIELDS]->(data_412)
+
+CREATE(data_412)-[:INPUTS_TO]->(software_141)
+CREATE(sample_4)-[:INPUTS_TO]->(software_141)
+
+CREATE(software_141)-[:YIELDS]->(data_413)
+
+CREATE(data_413)-[:DESCRIBES]->(sample2)
